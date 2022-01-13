@@ -1,34 +1,6 @@
 // #region punctuations
-const english_punctuations = [",", ".", "!", "?", ";", ":", '"', "'", "“", "”", "‘", "’", "„", "‹", "›", "<", ">", "«", "»", "_"];
-const chinese_punctuations = [
-    "。",
-    "，",
-    "、",
-    "；",
-    "：",
-    "「",
-    "」",
-    "『",
-    "』",
-    "（",
-    "）",
-    "─",
-    "？",
-    "！",
-    "…",
-    "﹏",
-    "《",
-    "》",
-    "〈",
-    "〉",
-    "＿",
-    "·",
-    "—",
-    "﹝",
-    "﹞",
-    "【",
-    "】",
-];
+const english_punctuations = [...",.!?;:\"'“”‘’„<>‹›«»_"];
+const chinese_punctuations = [..."。，、；：「」『』（）─？！…﹏《》〈〉＿·—﹝﹞【】"];
 
 export const punctuations = new Set([...english_punctuations, ...chinese_punctuations]);
 // #endregion
@@ -41,5 +13,9 @@ export const english_letters = new Set([...english_lowercase_letters, ...english
 // #endregion
 
 // #region spaces
-export const spaces = new Set([" ", "　", "\n", "\t"]);
+export const spaces = new Set([..." 　\n\t"]);
+// #endregion
+
+// #region numbers
+export const numbers = new Set([..."0123456789"]);
 // #endregion

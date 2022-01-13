@@ -1,19 +1,12 @@
-import { spaces } from "./dictionary";
+import { AnalyzerPrototype } from "./prototype";
+import { escape_regex } from "./helpers";
 
-export class Analyzer {
+export class Analyzer extends AnalyzerPrototype {
     public text = "";
-    public _case = false;
-    public _ignore = new Set<string>();
-    public _split = spaces;
 
     constructor(text = "", case_sensitive = false) {
+        super(case_sensitive);
         this.set(text);
-
-        if (case_sensitive) {
-            this.case_sensitive();
-        } else {
-            this.case_insensitive();
-        }
     }
 
     /**
@@ -26,73 +19,19 @@ export class Analyzer {
     }
 
     /**
-     * Set the ignore set
-     * @param ignore The ignore set or array
-     * @returns The analyzer
-     */
-    public ignore(ignore: Set<string> | string[]): this {
-        ignore.forEach((word) => this._ignore.add(word));
-        return this;
-    }
-
-    /**
-     * Get the ignore set
-     * @returns The ignore set
-     */
-    public get_ignore(): Set<string> {
-        return this._ignore;
-    }
-
-    /**
-     * Clear the ignore set
-     * @returns The analyzer
-     */
-    public clear_ignore(): this {
-        this._ignore.clear();
-        return this;
-    }
-
-    /**
-     * Set the split set
-     * @param split The split set or array
-     * @returns The analyzer
-     */
-    public split(split: Set<string> | string[]): this {
-        split.forEach((word) => this._split.add(word));
-        return this;
-    }
-
-    /**
-     * Get the split set
-     * @returns The split set
-     */
-    public get_split(): Set<string> {
-        return this._split;
-    }
-
-    /**
-     * Clear the split set
-     * @returns The analyzer
-     */
-    public clear_split(): this {
-        this._split.clear();
-        return this;
-    }
-
-    /**
      * Get ignored and splitted segments of the text in the analyzer
      * @returns The segments that has been ignored and splitted
      */
     public segments(): string[] {
         let segments = [
             (this._case ? this.text : this.text.toLowerCase()).replace(
-                new RegExp(`${[...this._ignore].map((x) => "\\" + (this._case ? x : x.toLowerCase())).join("|")}`, "g"),
+                new RegExp(`${[...this._ignore].map((x) => escape_regex(this._case ? x : x.toLowerCase())).join("|")}`, "g"),
                 "",
             ),
         ];
         if (this._split.size) {
             segments = segments[0].split(
-                new RegExp(`${[...this._split].map((x) => "\\" + (this._case ? x : x.toLowerCase())).join("|")}`, "g"),
+                new RegExp(`${[...this._split].map((x) => escape_regex(this._case ? x : x.toLowerCase())).join("|")}`, "g"),
             );
         }
         return segments;
@@ -184,22 +123,6 @@ export class Analyzer {
      */
     public get length(): number {
         return this.text.length;
-    }
-
-    /**
-     * Make analysis case-insensitive
-     */
-    public case_insensitive(): this {
-        this._case = false;
-        return this;
-    }
-
-    /**
-     * Make analysis case-sensitive
-     */
-    public case_sensitive(): this {
-        this._case = true;
-        return this;
     }
 }
 
