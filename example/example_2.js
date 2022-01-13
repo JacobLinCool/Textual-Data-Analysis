@@ -1,111 +1,4 @@
-# Textual Data Analysis
-
-文本分析
-
-## Features
-
-This library provides two main Analyzer classes: `Analyzer` and `GroupAnalyzer`.
-
-The `Analyzer` class is used to analyze a single text object, such as a sentence, a paragraph, or a whole document. It can do handy processes like **N-gram Analysis**, **Authority Words Analysis**, and **Meaningful Extraction**.
-
-In contrast, the `GroupAnalyzer` class aims to analyze a group of texts, such as a collection of documents.
-
-It provides the same functionality as `Analyzer` and more advanced features, such as **Co-word Analysis** and **TF-IDF Analysis**.
-
-### Analyzer
-
-It is very simple to setup an `Analyzer`.
-
-```javascript
-const { Analyzer, Dictionary, sort_map } = require("textual-data-analysis");
-
-const text = `
-自然語言處理（英語：Natural Language Processing，縮寫作 NLP）是人工智慧和語言學領域的分支學科。此領域探討如何處理及運用自然語言；自然語言處理包括多方面和步驟，基本有認知、理解、生成等部分。
-
-自然語言認知和理解是讓電腦把輸入的語言變成有意思的符號和關係，然後根據目的再處理。自然語言生成系統則是把計算機數據轉化為自然語言。
-`;
-
-const analyzer = new Analyzer(text)
-    .split(Dictionary.english_letters)
-    .split(Dictionary.punctuations);
-```
-
-Now you have an `Analyzer` that:
-
-  - analyzes the `text`
-  - splits the `text` by `english_letters` and `punctuations` before performing analysis
-
-#### N-gram Analysis
-
-**N-gram Analysis** is a process of analyzing the frequency of words in a text.
-
-After the pre-processing (`split`, `ignore`, `case`) is done, the `Analyzer` splits the text into n-length word slices and counts the frequency of each word slice.
-
-```javascript
-console.log(sort_map(analyzer.ngram(4)));
-```
-
-```
-Map(90) {
-    '自然語言' => 6,
-    '然語言處' => 2,
-    '語言處理' => 2,
-    '是人工智' => 1,
-    '人工智慧' => 1,
-    ...
-}
-```
-
-#### Authority Words Analysis
-
-**Authority Words Analysis** is also a process of analyzing the frequency of words in a text.
-
-By giving a list of words, the `Analyzer` will count the frequency of each word in the text after pre-processing.
-
-It use *long-word-first* strategy to match the words in the list.
-
-```javascript
-console.log(sort_map(analyzer.count(["自然語言處理", "自然", "語言"])));
-```
-
-```
-Map(3) { 
-    '語言' => 6, 
-    '自然' => 4, 
-    '自然語言處理' => 2 
-}
-```
-
-#### Meaningful Extraction
-
-**Meaningful Extraction** is a special kind of N-gram Analysis.
-
-By giving the `min_count` (default: `2`) and `min_length` (default: `2`), the `Analyzer` will try to extract meaningful words from the text.
-
-It will perform a series of `length/min_count`-gram to `min_length`-gram, and after each step it will filter out (`split`) the words that fulfill the match condition.
-
-```javascript
-console.log(sort_map(analyzer.meaningful()));
-```
-
-```
-Map(8) {
-    '自然語言' => 4,
-    '自然語言處理' => 2,
-    '語言' => 2,
-    '領域' => 2,
-    '處理' => 2,
-    '認知' => 2,
-    '理解' => 2,
-    '生成' => 2
-}
-```
-
-### GroupAnalyzer
-
-Setting up a `GroupAnalyzer` is similar to setting up an `Analyzer`, but you can feed it a list (`Array` or `Set`) of texts.
-
-```javascript
+/* eslint-disable */
 const { GroupAnalyzer, Dictionary, sort_map } = require("textual-data-analysis");
 
 const characters = [
@@ -137,63 +30,12 @@ const characters = [
 `,
 ];
 
-const ganalyzer = new GroupAnalyzer(characters)
-    .split(Dictionary.punctuations)
-    .split(Dictionary.english_letters);
-```
+const ganalyzer = new GroupAnalyzer(characters).split(Dictionary.punctuations).split(Dictionary.english_letters);
 
-First, we generate an authority word list by using the built-in `meaningful` method.
-
-```javascript
 const meaningful = ganalyzer.meaningful();
-```
 
-#### Co-word Analysis
-
-**Co-word Analysis** is a method to analyze the co-occurrence of words in multiple text objects.
-
-By giving a list of targets, we can get a co-occurrence matrix.
-
-```javascript
 const cowords = ganalyzer.coword([...meaningful.keys()]);
 console.log("cowords", cowords);
-```
 
-```
-cowords Map(94) {
-    '故事開始的' => Set(3) { 0, 1, 2 },
-    '超能力' => Set(1) { 0 },
-    '管理局' => Set(2) { 0, 2 },
-    '春埼的' => Set(1) { 0 },
-    '能力的' => Set(1) { 0 },
-    '自己的' => Set(3) { 0, 1, 2 },
-    '咲良田' => Set(1) { 0 },
-    '鑰匙圈' => Set(1) { 0 },
-    '相麻菫' => Set(3) { 0, 1, 2 },
-    ...
-}
-```
-
-#### TF-IDF Analysis
-
-**TF-IDF Analysis** is a method to find important words in a collection of text objects.
-
-By giving a list of targets, the `GroupAnalyzer` can calculate the TF-IDF of each word in the list.
-
-```javascript
 const tfidf = ganalyzer.tfidf([...meaningful.keys()]);
 console.log("tfidf", sort_map(tfidf));
-```
-
-```
-tfidf Map(94) {
-    '超能力' => 1.9084850188786497,
-    '對話' => 1.9084850188786497,
-    '未來' => 1.9084850188786497,
-    '認為' => 1.9084850188786497,
-    '透過' => 1.4313637641589874,
-    '無法' => 1.4313637641589874,
-    '復活' => 1.4313637641589874,
-    ...
-}
-```
