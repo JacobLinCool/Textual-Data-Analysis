@@ -115,7 +115,7 @@ export class GroupAnalyzer extends AnalyzerPrototype {
 
         for (let i = 0; i < this.length; i++) {
             for (let j = 0; j < words.length; j++) {
-                df.set(this.texts[i], (df.get(this.texts[i]) || 0) + (this.texts[i].includes(words[j]) ? 1 : 0));
+                df.set(words[j], (df.get(words[j]) || 0) + (this.texts[i].includes(words[j]) ? 1 : 0));
             }
         }
 
