@@ -130,7 +130,7 @@ export class GroupAnalyzer extends AnalyzerPrototype {
     public idf(words: Set<string> | string[]): Map<string, number> {
         const df = this.df(words);
         const total = this.length;
-        return new Map([...df].map(([word, count]) => [word, Math.log10(total / (count + 1))]));
+        return new Map([...df].map(([word, count]) => [word, Math.log10(total / count)]));
     }
 
     /**
