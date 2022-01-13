@@ -1,6 +1,6 @@
 {
     "name": "textual-data-analysis",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Textual Data Analysis",
     "main": "lib/index.js",
     "scripts": {
