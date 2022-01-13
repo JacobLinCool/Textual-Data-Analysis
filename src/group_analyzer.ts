@@ -145,6 +145,31 @@ export class GroupAnalyzer extends AnalyzerPrototype {
     }
 
     /**
+     * Get co-occurrence matrix of the texts in the analyzer.
+     * @param words The words to check
+     * @returns A Map of words and their co-occurrence matrix
+     */
+    public coword(words: Set<string> | string[]): Map<string, Set<number>> {
+        words = [...new Set(words)];
+
+        const cowords = new Map<string, Set<number>>();
+
+        for (let i = 0; i < this.length; i++) {
+            for (let j = 0; j < words.length; j++) {
+                const word = words[j];
+                const index = this.texts[i].indexOf(word);
+                if (index >= 0) {
+                    const set = cowords.get(word) || new Set<number>();
+                    set.add(index);
+                    cowords.set(word, set);
+                }
+            }
+        }
+
+        return cowords;
+    }
+
+    /**
      * Get the number of the texts in the analyzer
      */
     public get length(): number {

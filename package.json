@@ -1,8 +1,9 @@
 {
     "name": "textual-data-analysis",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Textual Data Analysis",
     "main": "lib/index.js",
+    "module": "lib/index.mjs",
     "scripts": {
         "prepare": "npm run build && npm run docs",
         "dev": "tsup --watch",
