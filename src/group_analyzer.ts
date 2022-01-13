@@ -160,7 +160,7 @@ export class GroupAnalyzer extends AnalyzerPrototype {
                 const index = this.texts[i].indexOf(word);
                 if (index >= 0) {
                     const set = cowords.get(word) || new Set<number>();
-                    set.add(index);
+                    set.add(i);
                     cowords.set(word, set);
                 }
             }

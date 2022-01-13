@@ -1,6 +1,6 @@
 {
     "name": "textual-data-analysis",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "Textual Data Analysis",
     "main": "lib/index.js",
     "module": "lib/index.mjs",
@@ -13,7 +13,12 @@
         "lint": "eslint .",
         "test": "jest --coverage"
     },
-    "keywords": [],
+    "keywords": [
+        "textual-data-analysis",
+        "text",
+        "data",
+        "analysis"
+    ],
     "author": "JacobLinCool <jacoblincool@gmail.com> (https://github.com/JacobLinCool)",
     "license": "MIT",
     "types": "lib/index.d.ts",
